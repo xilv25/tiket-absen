@@ -465,6 +465,8 @@ client.on(Events.MessageCreate, async (message) => {
         .setTitle("Done!")
         .setDescription(
           [
+            "__**English!**__"
+            "",
             "__**Purchase completed successfully🛒.**__",
             "",
             "__**Next Step**__",
@@ -476,8 +478,23 @@ client.on(Events.MessageCreate, async (message) => {
             "",
             "Follow the example image below.",
             "",
-            "If you have issues executing the script,make sure you have done it according to the example below",
-
+            "If you have issues executing the script,make sure you have done it according to the example below.",
+            "",
+            "",
+            "__**Indonesian!**__"
+            "",
+            "__**Pembelian berhasil diselesaikan🛒.**__",
+            "",
+            "__**Langkah Berikutnya**__",
+            `• Berikutnya, ambil skrip Anda di ${premiumMention}.`,
+            "",
+            "__**Cara Mengambil Script**__",
+            "• Klik **"Get Script"** untuk mendapatkan skrip Anda.",
+            "• Salin script Anda dan hapus bagian mana pun yang tidak termasuk dalam script aslinya.",
+            "",
+            "Ikuti contoh gambar di bawah ini.",
+            "",
+            "Jika Anda mengalami masalah saat menjalankan script, pastikan Anda telah melakukannya sesuai contoh di bawah ini.",    
           ].join("\n")
         )
         .setImage(
@@ -1035,8 +1052,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
               "",
               "__**Payment Methods**__",
               "",
-              "🔗 **Qris:** [Click here](https://shinzux.vercel.app/image_4164bbec-5215-4e0c-98ca-d4c198a10c9e.png) — pay via Qris.",
-              "🔗 **Paypal:** [Click here](https://www.paypal.me/RizkiJatiPrasetyo) — pay via Paypal.",
+              "🔗 **Qris:** [Click here to pay](https://shinzux.vercel.app/image_4164bbec-5215-4e0c-98ca-d4c198a10c9e.png) — pay via Qris.",
+              "🔗 **Paypal:** [Click here to pay](https://www.paypal.me/RizkiJatiPrasetyo) — pay via Paypal.",
               "",
               "__**Important**__",
               "After payment, you **MUST** upload a screenshot of your payment proof.",
