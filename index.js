@@ -211,37 +211,37 @@ function formatTime(seconds) {
 const commands = [
   new SlashCommandBuilder()
     .setName("setup")
-    .setDescription("Setup panel tiket di channel ini.")
+    .setDescription("Setup ticket panel on this channel.")
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setDMPermission(false),
 
   new SlashCommandBuilder()
     .setName("faq")
-    .setDescription("Kelola FAQ untuk tiket support.")
+    .setDescription("Manage FAQs for support tickets.")
     .addSubcommand((sub) =>
       sub
         .setName("set")
-        .setDescription("Tambah / update satu item FAQ.")
+        .setDescription("Add / update one FAQ item.")
         .addStringOption((opt) =>
           opt
             .setName("question")
-            .setDescription("Pertanyaan yang sering ditanyakan.")
+            .setDescription("Frequently asked questions.")
             .setRequired(true)
         )
         .addStringOption((opt) =>
           opt
             .setName("answer")
-            .setDescription("Jawaban untuk pertanyaan tersebut.")
+            .setDescription("The answer to the question.")
             .setRequired(true)
         )
     )
     .addSubcommand((sub) =>
-      sub.setName("list").setDescription("Lihat semua pertanyaan FAQ.")
+      sub.setName("list").setDescription("View all FAQ questions.")
     )
     .addSubcommand((sub) =>
       sub
         .setName("remove")
-        .setDescription("Hapus salah satu pertanyaan FAQ.")
+        .setDescription("Delete one of the FAQ questions.")
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setDMPermission(false),
@@ -249,18 +249,18 @@ const commands = [
   // /absen panel + /absen staff
   new SlashCommandBuilder()
     .setName("absen")
-    .setDescription("Panel & konfigurasi absen staff.")
+    .setDescription("Staff attendance panel & configuration.")
     .addSubcommand((sub) =>
-      sub.setName("panel").setDescription("Tampilkan panel absen staff.")
+      sub.setName("panel").setDescription("Show staff absence panel.")
     )
     .addSubcommand((sub) =>
       sub
         .setName("staff")
-        .setDescription("Tambah / hapus staff di panel absen.")
+        .setDescription("Add / delete staff in the attendance panel.")
         .addStringOption((opt) =>
           opt
             .setName("action")
-            .setDescription("Aksi yang ingin dilakukan")
+            .setDescription("Actions to be taken")
             .setRequired(true)
             .addChoices(
               { name: "add", value: "add" },
@@ -270,7 +270,7 @@ const commands = [
         .addUserOption((opt) =>
           opt
             .setName("user")
-            .setDescription("Staff yang akan diatur")
+            .setDescription("Staff to be arranged")
             .setRequired(true)
         )
     )
@@ -278,11 +278,11 @@ const commands = [
 
   new SlashCommandBuilder()
     .setName("blacklist")
-    .setDescription("Toggle blacklist channel dari sistem absen.")
+    .setDescription("Toggle blacklist channel from attendance system.")
     .addChannelOption((opt) =>
       opt
         .setName("channel")
-        .setDescription("Channel yang mau di-blacklist / un-blacklist.")
+        .setDescription("Channels to be blacklisted / un-blacklisted.")
         .addChannelTypes(ChannelType.GuildText)
         .setRequired(true)
     )
@@ -291,15 +291,15 @@ const commands = [
 
   new SlashCommandBuilder()
     .setName("owner")
-    .setDescription("Pengaturan admin helper.")
+    .setDescription("Admin helper settings.")
     .addSubcommand((sub) =>
       sub
         .setName("setpassword")
-        .setDescription("Set password admin untuk selector.")
+        .setDescription("Set admin password for selector.")
         .addStringOption((opt) =>
           opt
             .setName("password")
-            .setDescription("Password baru (tidak akan ditampilkan).")
+            .setDescription("New password (will not be displayed).")
             .setRequired(true)
         )
     )
@@ -308,7 +308,7 @@ const commands = [
 
   new SlashCommandBuilder()
     .setName("ownerreset")
-    .setDescription("Reset daftar user yang pernah call admin.")
+    .setDescription("Reset the list of users who have called the admin.")
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setDMPermission(false),
 ].map((c) => c.toJSON());
@@ -382,33 +382,32 @@ function buildAbsenPanel() {
   }
 
   const body =
-    lines.join("\n") || "Belum ada data staff helper. Tambahkan via `/absen staff`.";
+    lines.join("\n") || "There is no staff helper data yet. Add it via `/absen staff`.";
 
   const desc = [
-    "__**Staff activity and attendance overview.**__",
-    "Ringkasan aktivitas dan absensi staff LimeHub.",
+    "Staff activity and attendance overview.",
     "",
     body,
   ].join("\n");
 
   const embed = new EmbedBuilder()
     .setColor(THEME_COLOR)
-    .setTitle("📊 Panel Absen Staff LimeHub")
+    .setTitle("📊 LimeHub Staff Attendance Panel")
     .setDescription(desc)
     .setImage(FOOTER_GIF)
     .setFooter({ text: footerText("Support") });
 
   const row = new ActionRowBuilder().addComponents(
     new ButtonBuilder()
-      .setCustomId("absen_status_on")
+      .setCustomId("absent_status_on")
       .setLabel("ON")
       .setStyle(ButtonStyle.Success),
     new ButtonBuilder()
-      .setCustomId("absen_status_rest")
+      .setCustomId("absent_status_rest")
       .setLabel("REST")
       .setStyle(ButtonStyle.Primary),
     new ButtonBuilder()
-      .setCustomId("absen_status_off")
+      .setCustomId("absent_status_off")
       .setLabel("OFF")
       .setStyle(ButtonStyle.Danger)
   );
@@ -450,7 +449,7 @@ client.on(Events.MessageCreate, async (message) => {
       }
       if (!canUseDone) {
         return message.reply(
-          "❌ Hanya staff/helper yang dapat menggunakan `.done`."
+          "❌ Only staff/helpers can use `.done`."
         );
       }
 
@@ -466,24 +465,19 @@ client.on(Events.MessageCreate, async (message) => {
         .setTitle("Done!")
         .setDescription(
           [
-            "__**Purchase completed successfully.**__",
-            "__Berhasil membeli script 🛒__",
+            "__**Purchase completed successfully🛒.**__",
             "",
             "__**Next Step**__",
             `• Next, take your script in ${premiumMention}.`,
-            `• Langkah selanjutnya adalah melakukan pengambilan script di ${premiumMention}.`,
             "",
             "__**How to Get the Script**__",
-            '• Click **"Get Script"** to receive your script.',
-            '• Klik **"Get Script"** untuk mendapatkan script.',
+            "• Click **"Get Script"** to receive your script.",
             "• Copy your script and remove any part that is not included in the real script.",
-            "• Copy script kamu dan lakukan pemotongan untuk membersihkan bagian yang tidak termasuk dalam script.",
             "",
-            "__**Follow the example image below.**__",
-            "Ikuti contoh pada gambar di bawah.",
+            "Follow the example image below.",
             "",
-            "__**If you have issues executing the script...**__",
-            "Apabila mengalami kendala saat execute script, pastikan kamu sudah melakukannya sesuai contoh di bawah.",
+            "If you have issues executing the script,make sure you have done it according to the example below",
+
           ].join("\n")
         )
         .setImage(
@@ -527,27 +521,24 @@ client.on(Events.MessageCreate, async (message) => {
 
   const queueEmbed = new EmbedBuilder()
     .setColor(THEME_COLOR)
-    .setTitle("📊 STATUS ANTRIAN")
+    .setTitle("📊 QUEUE STATUS")
     .setDescription(
       [
-        "__**Your payment proof has been received.**__",
-        `Halo ${message.member}, bukti pembayaran kamu sudah diterima ✅`,
+        "Halo ${message.member}, your proof of payment has been received.✅",
       ].join("\n")
     )
     .addFields({
-      name: "__POSISI ANTRIAN ANDA__",
+      name: "**YOUR QUEUE POSITION**",
       value: [
         "```yaml",
         `Position: #${position} of ${total}`,
-        `POSISI: #${position} dari ${total}`,
         "```",
       ].join("\n"),
     })
     .addFields({
       name: "✨",
       value: [
-        "__**Your ticket will be processed shortly.**__",
-        "Tiket kamu akan diproses sebentar lagi!",
+        "Your ticket will be processed shortly.",
       ].join("\n"),
     })
     .setImage(FOOTER_GIF)
@@ -627,18 +618,14 @@ client.on(Events.InteractionCreate, async (interaction) => {
         .setDescription(
           [
             "__**Create a New Ticket**__",
-            "Buat tiket baru",
             "",
             "Click the button below to create a ticket based on your needs.",
-            "Klik tombol di bawah untuk membuat tiket baru sesuai kebutuhan kamu.",
             "",
-            "Use the ticket only for:",
-            "Gunakan tiket hanya untuk:",
-            "• Transaction / Transaksi",
-            "• Support / Bantuan",
+            "Use the ticket only for :",
             "",
-            "__**Please choose wisely before creating your ticket.**__",
-            "Harap pilih dengan bijak sebelum membuat tiket.",
+            `Transaction / Support`,
+            "",
+            "-# Use tickets to purchase scripts and ask questions.",
           ].join("\n")
         )
         .setImage(FOOTER_GIF)
@@ -653,7 +640,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
       await interaction.channel.send({ embeds: [panelEmbed], components: [row] });
       await replyOnce(interaction, {
-        content: "✅ Panel tiket sudah dibuat.",
+        content: "✅ Ticket panel has been created.",
         ephemeral: true,
       });
       return;
@@ -672,7 +659,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
         faqItems.push({ id, question, answer });
 
         await replyOnce(interaction, {
-          content: `✅ FAQ item #${id} ditambahkan:\n**Q:** ${question}`,
+          content: `✅ FAQ item #${id} added:\n**Q:** ${question}`,
           ephemeral: true,
         });
         return;
@@ -681,7 +668,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       if (sub === "list") {
         if (!faqItems.length) {
           await replyOnce(interaction, {
-            content: "📚 Belum ada FAQ yang tersimpan.",
+            content: "📚 There are no FAQs saved yet yg.",
             ephemeral: true,
           });
           return;
@@ -693,7 +680,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
         const desc = [
           "__**All available FAQ questions:**__",
-          "Daftar semua pertanyaan FAQ yang tersedia:",
           "",
           listText,
         ].join("\n");
@@ -712,7 +698,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       if (sub === "remove") {
         if (!faqItems.length) {
           await replyOnce(interaction, {
-            content: "❌ Tidak ada FAQ yang bisa dihapus.",
+            content: "❌ There are no FAQs that can be deleted.",
             ephemeral: true,
           });
           return;
@@ -726,13 +712,13 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
         const menu = new StringSelectMenuBuilder()
           .setCustomId("faq_remove_select")
-          .setPlaceholder("Pilih pertanyaan FAQ yang ingin dihapus")
+          .setPlaceholder("Select the FAQ question you want to delete.")
           .addOptions(options);
 
         const row = new ActionRowBuilder().addComponents(menu);
 
         await replyOnce(interaction, {
-          content: "Pilih pertanyaan yang ingin dihapus:",
+          content: "Select the question you want to delete:",
           components: [row],
           ephemeral: true,
         });
@@ -763,7 +749,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
           )
         ) {
           await replyOnce(interaction, {
-            content: "❌ Hanya admin yang bisa mengatur daftar staff absen.",
+            content: "❌ Only admin can manage staff absence list.",
             ephemeral: true,
           });
           return;
@@ -776,7 +762,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
         if (action === "add") {
           if (helperIds.includes(id)) {
             await replyOnce(interaction, {
-              content: `⚠️ ${user} sudah ada di panel absen.`,
+              content: `⚠️ ${user} is already in the attendance panel.`,
               ephemeral: true,
             });
             return;
@@ -794,7 +780,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
           saveHelperIds();
 
           await replyOnce(interaction, {
-            content: `✅ ${user} ditambahkan ke panel absen.`,
+            content: `✅ ${user} added to attendance panel.`,
             ephemeral: true,
           });
           return;
@@ -803,7 +789,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
         if (action === "remove") {
           if (!helperIds.includes(id)) {
             await replyOnce(interaction, {
-              content: `⚠️ ${user} tidak ada di panel absen.`,
+              content: `⚠️ ${user} is not in the attendance panel.`,
               ephemeral: true,
             });
             return;
@@ -815,7 +801,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
           saveHelperIds();
 
           await replyOnce(interaction, {
-            content: `✅ ${user} dihapus dari panel absen.`,
+            content: `✅ ${user} is removed from the attendance panel.`,
             ephemeral: true,
           });
           return;
@@ -829,13 +815,13 @@ client.on(Events.InteractionCreate, async (interaction) => {
       if (blacklistedChannels.has(ch.id)) {
         blacklistedChannels.delete(ch.id);
         await replyOnce(interaction, {
-          content: `✅ Channel ${ch} **dihapus** dari blacklist.`,
+          content: `✅ Channel ${ch} **removed** from blacklist.`,
           ephemeral: true,
         });
       } else {
         blacklistedChannels.add(ch.id);
         await replyOnce(interaction, {
-          content: `✅ Channel ${ch} **ditambahkan** ke blacklist.`,
+          content: `✅ Channel ${ch} **added** to blacklist.`,
           ephemeral: true,
         });
       }
@@ -1042,21 +1028,18 @@ client.on(Events.InteractionCreate, async (interaction) => {
           .setTitle(`🎟️ Ticket #${number} — ${member}`)
           .setDescription(
             [
-              "__**Thank you for opening a purchase ticket.**__",
-              `Halo ${member}, terima kasih telah membuat tiket di **LimeHub**.`,
+              `Halo ${member}, Thank you for creating a ticket on **LimeHub**.`,
               "",
               "__**Script Price**__",
               "💵 Script Price: Rp 40.000",
               "",
               "__**Payment Methods**__",
-              "Silakan lakukan pembayaran ke salah satu metode berikut:",
               "",
               "🔗 **Qris:** [Click here](https://shinzux.vercel.app/image_4164bbec-5215-4e0c-98ca-d4c198a10c9e.png) — pay via Qris.",
               "🔗 **Paypal:** [Click here](https://www.paypal.me/RizkiJatiPrasetyo) — pay via Paypal.",
               "",
               "__**Important**__",
-              "After payment, you **must** upload a screenshot of your payment proof.",
-              "Setelah melakukan pembayaran, **WAJIB** upload bukti transfer (screenshot).",
+              "After payment, you **MUST** upload a screenshot of your payment proof.",
               "",
               "__**Ticket Handling**__",
               `${handlerMention} will process your ticket after your payment is verified.`,
@@ -1075,15 +1058,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
           .setTitle(`❓ Support Ticket #${number} — ${member}`)
           .setDescription(
             [
-              "__**Thank you for opening a support ticket.**__",
-              `Halo ${member}, terima kasih telah membuka tiket support **LimeHub**.`,
+              `Halo ${member}, Thank you for opening a support ticket. **LimeHub**.`,
               "",
-              "__**Before our team replies directly...**__",
-              "Please choose one of the questions below that matches your issue.",
-              "Sebelum LimeHub Team menjawab secara langsung, silakan pilih salah satu pertanyaan di bawah yang sesuai dengan kendalamu.",
+              "Before our team replies directly, Please choose one of the questions below that matches your issue.",
               "",
-              "__**Many common issues are already answered in FAQ.**__",
-              "Banyak masalah umum sudah dijawab di FAQ.",
+              "**Many common issues are already answered in FAQ.",
             ].join("\n")
           )
           .setImage(FOOTER_GIF)
@@ -1101,12 +1080,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
           .setDescription(
             faqItems.length
               ? [
-                  "__**Choose a question that matches your problem.**__",
-                  "Pilih pertanyaan yang paling sesuai dengan kendalamu:",
+                  "Choose a question that matches your problem.",
                 ].join("\n")
               : [
-                  "__**No FAQ has been set yet.**__",
-                  "Belum ada FAQ yang diset. Silakan tunggu LimeHub Team menjawab.",
+                  "No FAQ has been set yet, Please wait for LimeHub Team to reply.",
                 ].join("\n")
           )
           .setImage(FOOTER_GIF)
@@ -1119,11 +1096,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
         const faqMenu = new StringSelectMenuBuilder()
           .setCustomId("support_faq_select")
-          .setPlaceholder("Pilih pertanyaan FAQ di sini")
+          .setPlaceholder("Select a FAQ question here")
           .addOptions(
             faqOptions.length
               ? faqOptions
-              : [{ label: "Belum ada FAQ", value: "none" }]
+              : [{ label: "There are no FAQs yet", value: "none" }]
           );
         const faqRow = new ActionRowBuilder().addComponents(faqMenu);
 
@@ -1145,14 +1122,14 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
         if (!helperOptions.length) {
           helperOptions.push({
-            label: "Tidak ada helper online saat ini",
+            label: "There are no helpers online at the moment",
             value: "none",
           });
         }
 
         const helperMenu = new StringSelectMenuBuilder()
           .setCustomId("support_helper_select")
-          .setPlaceholder("Pilih helper yang sedang online")
+          .setPlaceholder("Select a helper who is online")
           .addOptions(helperOptions);
         const helperRow = new ActionRowBuilder().addComponents(helperMenu);
 
@@ -1167,11 +1144,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
         .setTitle("✅ Ticket created successfully")
         .setDescription(
           [
-            "__**Your ticket has been created successfully.**__",
-            `Tiket kamu berhasil dibuat: ${ticketChan}`,
+            `Your ticket was successfully created : ${ticketChan}.`,
             "",
-            "__**Click the button below to go to your ticket.**__",
-            "Klik tombol di bawah untuk menuju ticket kamu.",
+            "Click the button below to go to your ticket.",
           ].join("\n")
         )
         .setImage(FOOTER_GIF)
@@ -1243,11 +1218,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
           .setTitle("🛠️ Ticket Processing")
           .setDescription(
             [
-              "__**This ticket is now being processed by our staff.**__",
-              `Tiket ini sedang diproses oleh ${interaction.member}.`,
+              `This ticket is being processed by ${interaction.member}.`,
               "",
-              "__**Please wait while we confirm your payment.**__",
-              `Halo ${ticketUserMention}, mohon tunggu ya!`,
+              `Hello ${ticketUserMention}, Please wait while we confirm your payment.`,
             ].join("\n")
           )
           .setImage(FOOTER_GIF)
@@ -1272,21 +1245,18 @@ client.on(Events.InteractionCreate, async (interaction) => {
               .setDescription(
                 [
                   "__**Your ticket has been completed.**__",
-                  `Halo ${ticketUserMention}, tiket kamu sudah selesai.`,
+                  `Halo ${ticketUserMention}, your ticket is complete.`,
                   "",
                   "__**Next Step**__",
                   `Please continue to ${premiumMention} to get your script.`,
-                  `Silakan lanjut ke channel ${premiumMention} untuk mengambil script kamu.`,
                   "",
                   "__**Short Command**__",
-                  "Type `!command` to see all info you need.",
-                  "Ketik `!command` untuk lihat semua info yang kamu cari.",
+                  "Go to the FAQ channel to find out the information you need.",
                   "",
-                  "__**Auto Close Countdown**__",
-                  `_Ticket will be closed automatically in ${formatTime(
+                  "Auto Close Countdown",
+                  `Ticket will be closed automatically in **${formatTime(
                     sec
-                  )}._`,
-                  `_Ticket akan otomatis ditutup dalam ${formatTime(sec)}._`,
+                  )}**.`,
                 ].join("\n")
               )
               .setImage(FOOTER_GIF)
@@ -1311,8 +1281,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
                   .setTitle("🔒 Ticket Closed")
                   .setDescription(
                     [
-                      "__**This purchase ticket has been closed.**__",
-                      "Ticket ini telah ditutup. Terima kasih telah menggunakan layanan LimeHub.",
+                      "This purchase ticket has been closed. Thank you for using LimeHub services.",
                     ].join("\n")
                   )
                   .setImage(FOOTER_GIF)
@@ -1339,23 +1308,19 @@ client.on(Events.InteractionCreate, async (interaction) => {
         const makeSupportEmbed = (sec) =>
           new EmbedBuilder()
             .setColor(THEME_COLOR)
-            .setTitle("🛠️ Support Ticket Processing")
+            .setTitle("✅ Ticket has been resolved")
             .setDescription(
               [
-                "__**FAQ session in this ticket has ended.**__",
-                "Sesi tanya jawab FAQ di ticket ini telah berakhir.",
+                "FAQ session in this ticket has ended.",
                 "",
-                "__**This ticket is now being handled by:**__",
-                `Tiket ini sekarang sedang diproses oleh ${interaction.member}.`,
+                `This ticket is currently being processed by ${interaction.member}.`,
                 "",
-                "__**Please wait for our response.**__",
-                `Halo ${ticketUserMention}, mohon tunggu ya!`,
+                `Halo ${ticketUserMention}, Your ticket will be automatically closed in 5 minutes.`,
                 "",
                 "__**Auto Close Countdown**__",
-                `_Ticket will be automatically closed in ${formatTime(
+                `Ticket will be automatically closed in **${formatTime(
                   sec
-                )}._`,
-                `_Ticket akan otomatis ditutup dalam ${formatTime(sec)}._`,
+                )}**.`,
               ].join("\n")
             )
             .setImage(FOOTER_GIF)
@@ -1379,8 +1344,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 .setTitle("🔒 Ticket Closed")
                 .setDescription(
                   [
-                    "__**This support ticket has been closed.**__",
-                    "Ticket support ini telah ditutup. Terima kasih telah menggunakan layanan LimeHub.",
+                    "This support ticket has been closed. Thank you for using LimeHub services.",
                   ].join("\n")
                 )
                 .setImage(FOOTER_GIF)
@@ -1427,8 +1391,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
           .setTitle("🔒 Closing Ticket")
           .setDescription(
             [
-              "__**This ticket will be closed shortly.**__",
-              `Ticket akan ditutup dalam **${sec} detik**.`,
+              `Ticket will close in **${sec} seconds**.`,
             ].join("\n")
           )
           .setImage(FOOTER_GIF)
@@ -1481,7 +1444,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
       const [removed] = faqItems.splice(idx, 1);
       await interaction.reply({
-        content: `✅ FAQ \`#${id}\` dihapus:\n**${removed.question}**`,
+        content: `✅ FAQ \`#${id}\` removed:\n**${removed.question}**`,
         ephemeral: true,
       });
       return;
@@ -1494,7 +1457,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
       if (!channel.name.includes("❓")) {
         await interaction.reply({
-          content: "❌ Menu ini hanya untuk tiket support.",
+          content: "❌ This menu is for support tickets only.",
           ephemeral: true,
         });
         return;
@@ -1502,7 +1465,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
       if (value === "none") {
         await interaction.reply({
-          content: "Belum ada FAQ yang tersedia.",
+          content: "There are no FAQs available yet.",
           ephemeral: true,
         });
         return;
@@ -1511,7 +1474,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       const faq = faqItems.find((f) => f.id === value);
       if (!faq) {
         await interaction.reply({
-          content: "❌ FAQ tidak ditemukan (mungkin sudah direset).",
+          content: "❌ FAQ not found (may have been reset).",
           ephemeral: true,
         });
         return;
@@ -1538,8 +1501,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
               `**A:** ${answer}`,
               "",
               "__**FAQ session countdown**__",
-              `_This FAQ session will end in ${formatTime(sec)}._`,
-              `_Session FAQ ini akan berakhir dalam ${formatTime(sec)}._`,
+              `This FAQ session will end in **${formatTime(sec)}**.`,
             ].join("\n")
           )
           .setImage(FOOTER_GIF)
@@ -1566,8 +1528,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
               .setTitle("🔒 Ticket Closed")
               .setDescription(
                 [
-                  "__**FAQ session has ended and this ticket is now closed automatically.**__",
-                  "Session FAQ berakhir dan ticket ini telah ditutup secara otomatis. Terima kasih telah menggunakan layanan LimeHub.",
+                  "FAQ session has ended and this ticket has been automatically closed. Thank you for using LimeHub services.",
                 ].join("\n")
               )
               .setImage(FOOTER_GIF)
@@ -1593,8 +1554,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
           .setTitle("⚠️ Helper Offline")
           .setDescription(
             [
-              "__**There are currently no helpers online.**__",
-              "Saat ini tidak ada helper yang online.",
+              "There are currently no helpers online.",
             ].join("\n")
           )
           .setImage(FOOTER_GIF)
@@ -1611,7 +1571,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
         if (!ownerConfig.password) {
           await interaction.reply({
             content:
-              "❌ Password admin belum diset. Gunakan `/owner setpassword` dulu.",
+              "❌ The admin password has not been set. Use `/owner setpassword` first.",
             ephemeral: true,
           });
           return;
@@ -1619,7 +1579,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
         await interaction.reply({
           content:
-            "🔐 Masukkan password admin (kirim **1 pesan** di channel ini, nanti dihapus otomatis).",
+            "🔐 Enter admin password (send **1 message** in this channel, it will be deleted automatically).",
           ephemeral: true,
         });
 
@@ -1645,11 +1605,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
               .setTitle("📣 Admin Called")
               .setDescription(
                 [
-                  "__**Password verified successfully.**__",
-                  "Password benar.",
+                  "Password verified successfully.",
+                  "Password is correct.",
                   "",
-                  "__**Admin has been called to help with this ticket:**__",
-                  `Memanggil <@${ownerId}> untuk membantumu di tiket ini.`,
+                  "Admin has been called to help with this ticket.",
+                  `Calling <@${ownerId}> to help you on this ticket.`,
                 ].join("\n")
               )
               .setImage(FOOTER_GIF)
@@ -1667,11 +1627,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
           } else {
             const failEmbed = new EmbedBuilder()
               .setColor(0xff5555)
-              .setTitle("❌ Password Salah")
+              .setTitle("❌ Wrong Password")
               .setDescription(
                 [
-                  "__**The password you entered is incorrect.**__",
-                  "Password yang kamu masukkan salah.",
+                  "The password you entered is incorrect.",
                 ].join("\n")
               )
               .setImage(FOOTER_GIF)
@@ -1688,11 +1647,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
           if (reason === "time" && collected.size === 0) {
             const timeoutEmbed = new EmbedBuilder()
               .setColor(THEME_COLOR)
-              .setTitle("⌛ Waktu Habis")
+              .setTitle("⌛ Time has run out")
               .setDescription(
                 [
-                  "__**No password received in time.**__",
-                  "Tidak ada password yang dikirim. Silakan coba lagi.",
+                  "No password was sent. Please try again.",
                 ].join("\n")
               )
               .setImage(FOOTER_GIF)
@@ -1716,8 +1674,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
         .setTitle("📣 Helper Called")
         .setDescription(
           [
-            "__**A Helper has been called to assist you.**__",
-            `Memanggil <@${helperId}> untuk membantu tiket ini.`,
+            "A Helper has been called to assist you.",
+            `Calling <@${helperId}> to help with this ticket.`,
           ].join("\n")
         )
         .setImage(FOOTER_GIF)
