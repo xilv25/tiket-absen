@@ -953,7 +953,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
         if (SPECIAL_HELPER_ID && !usedOwnerSelector.has(member.id)) {
           helperOptions.push({
-            label: "🚨 Contact Admin (priority)",
+            label: "🚨 Contact Admin (require password)",
             value: `owner:${SPECIAL_HELPER_ID}`,
           });
         }
@@ -1086,9 +1086,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
                   "",
                   `Silakan lanjut ke channel ${premiumMention}.`,
                   "",
-                  "Ketik \`!command\` untuk lihat semua info yang kamu cari!",
+                  "Pergi ke \`FAQ channel\` untuk melihat semua info yang kamu cari!",
                   "",
-                  `_Ticket akan otomatis ditutup dalam ${formatTime(sec)}._`,
+                  `Ticket akan otomatis ditutup dalam **${formatTime(sec)}.**`,
                 ].join("\n")
               )
               .setImage(FOOTER_GIF)
@@ -1138,16 +1138,16 @@ client.on(Events.InteractionCreate, async (interaction) => {
         const makeSupportEmbed = (sec) =>
           new EmbedBuilder()
             .setColor(THEME_COLOR)
-            .setTitle("🛠️ Support Ticket Processing")
+            .setTitle("✅Ticket Has Been Completed")
             .setDescription(
               [
                 "Sesi tanya jawab FAQ di ticket ini telah berakhir.",
                 "",
-                `Tiket ini sekarang sedang diproses oleh ${interaction.member}.`,
+                `Tiket ini sudah di selesaikan oleh ${interaction.member}.`,
                 "",
-                `Halo ${ticketUserMention}, mohon tunggu ya!`,
+                `Halo ${ticketUserMention}, kami harap jawaban kami sesuai dengan apa yang kamu cari`,
                 "",
-                `_Ticket akan otomatis ditutup dalam ${formatTime(sec)}._`,
+                `Ticket akan otomatis ditutup dalam **${formatTime(sec)}**.`,
               ].join("\n")
             )
             .setImage(FOOTER_GIF)
