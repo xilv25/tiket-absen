@@ -1,0 +1,20 @@
+{
+  "name": "limehub-discord-bot",
+  "version": "1.0.0",
+  "description": "LimeHub All-in-One Discord Bot - Ticket & Attendance System",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "keywords": ["discord", "bot", "ticket", "attendance"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
