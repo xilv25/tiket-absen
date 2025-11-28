@@ -1,0 +1,52 @@
+.env
+logs/
+node_modules/
+owner_selector.json
+owner_config.json
+
+# env / secrets
+.env
+env.txt
+
+# node stuff
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# logs
+logs/
+*.log
+
+# runtime data absen
+absen_data.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# env / secrets
+.env
+env.txt
+
+# node stuff
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# logs
+logs/
+*.log
+
+# runtime data absen
+absen_data.json
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
